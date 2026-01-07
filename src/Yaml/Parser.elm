@@ -506,7 +506,7 @@ duplicatedPropertyKeys properties =
 
         duplicated : ( Set String, Set String )
         duplicated =
-            List.foldr
+            List.foldl
                 (\x ( obs, dup ) ->
                     if Set.member x obs then
                         -- if this item has already been observed, add to duplicates
