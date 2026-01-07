@@ -363,12 +363,11 @@ countLeadingSpacesInString str =
     let
         countHelper : String -> Int -> Int
         countHelper s count =
-            case String.uncons s of
-                Just ( ' ', rest ) ->
-                    countHelper rest (count + 1)
+            if String.startsWith " " s then
+                countHelper (String.dropLeft 1 s) (count + 1)
 
-                _ ->
-                    count
+            else
+                count
     in
     countHelper str 0
 
