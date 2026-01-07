@@ -33,62 +33,62 @@ import Regex exposing (Regex)
 
 {-| -}
 isColon : Char -> Bool
-isColon =
-    is ':'
+isColon x =
+    x == ':'
 
 
 {-| -}
 isComma : Char -> Bool
-isComma =
-    is ','
+isComma x =
+    x == ','
 
 
 {-| -}
 isSpace : Char -> Bool
-isSpace =
-    is ' '
+isSpace x =
+    x == ' '
 
 
 {-| -}
 isNewLine : Char -> Bool
-isNewLine =
-    is '\n'
+isNewLine x =
+    x == '\n'
 
 
 {-| -}
 isListStart : Char -> Bool
-isListStart =
-    is '['
+isListStart x =
+    x == '['
 
 
 {-| -}
 isListEnd : Char -> Bool
-isListEnd =
-    is ']'
+isListEnd x =
+    x == ']'
 
 
 {-| -}
 isRecordStart : Char -> Bool
-isRecordStart =
-    is '{'
+isRecordStart x =
+    x == '{'
 
 
 {-| -}
 isRecordEnd : Char -> Bool
-isRecordEnd =
-    is '}'
+isRecordEnd x =
+    x == '}'
 
 
 {-| -}
 isSingleQuote : Char -> Bool
-isSingleQuote =
-    is '\''
+isSingleQuote x =
+    x == '\''
 
 
 {-| -}
 isDoubleQuote : Char -> Bool
-isDoubleQuote =
-    is '"'
+isDoubleQuote x =
+    x == '"'
 
 
 {-| -}
@@ -101,12 +101,6 @@ neither f1 f2 char =
 neither3 : (Char -> Bool) -> (Char -> Bool) -> (Char -> Bool) -> Char -> Bool
 neither3 f1 f2 f3 char =
     not (f1 char) && not (f2 char) && not (f3 char)
-
-
-{-| -}
-is : Char -> Char -> Bool
-is searched char =
-    char == searched
 
 
 
