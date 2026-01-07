@@ -357,9 +357,8 @@ encodeInlineDict key val r =
         stringify : Dict k v -> List String
         stringify d =
             d
-                |> Dict.map (\_ -> val >> toString 0)
                 |> Dict.toList
-                |> List.map (\( fst, snd ) -> key fst ++ ": " ++ snd)
+                |> List.map (\( fst, snd ) -> key fst ++ ": " ++ (snd |> val |> toString 0))
     in
     "{"
         ++ (stringify r |> String.join ", ")
