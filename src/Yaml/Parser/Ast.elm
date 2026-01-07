@@ -263,7 +263,7 @@ map f value =
             f (List_ (List.map (map f) l))
 
         Record_ r ->
-            f (Record_ <| Dict.fromList (List.map (\( k, v ) -> ( k, map f v )) (Dict.toList r)))
+            f (Record_ <| Dict.map (always (map f)) r)
 
         Anchor_ name a ->
             f (Anchor_ name (map f a))
