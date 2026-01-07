@@ -321,36 +321,41 @@ isLiteralString str =
 
 postProcessLiteralString : String -> String
 postProcessLiteralString str =
-    case String.left 2 str of
-        "|\n" ->
-            let
-                content : String
-                content =
-                    String.dropLeft 2 str
-            in
-            content
-                |> countLeadingSpacesInMultiline
-                |> removeLeadingSpaces content
+    if String.startsWith "|\n" str then
+        let
+            content : String
+            content =
+                String.dropLeft 2 str
 
-        _ ->
-            str
+            split : List String
+            split =
+                String.split "\n" content
+
+            leadingSpaces : Int
+            leadingSpaces =
+                countLeadingSpacesInMultiline split
+        in
+        removeLeadingSpaces leadingSpaces split
+
+    else
+        str
 
 
-removeLeadingSpaces : String -> Int -> String
-removeLeadingSpaces str count =
+removeLeadingSpaces : Int -> List String -> String
+removeLeadingSpaces count str =
     str
-        |> String.split "\n"
         |> List.map (String.dropLeft count)
         |> String.join "\n"
 
 
-countLeadingSpacesInMultiline : String -> Int
+countLeadingSpacesInMultiline : List String -> Int
 countLeadingSpacesInMultiline str =
-    str
-        |> String.split "\n"
-        |> List.head
-        |> Maybe.withDefault ""
-        |> countLeadingSpacesInString
+    case str of
+        head :: _ ->
+            countLeadingSpacesInString head
+
+        [] ->
+            0
 
 
 countLeadingSpacesInString : String -> Int
