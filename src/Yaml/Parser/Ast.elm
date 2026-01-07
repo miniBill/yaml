@@ -232,7 +232,7 @@ fold f value z =
             f value (List.foldl (fold f) z l)
 
         Record_ r ->
-            f value (List.foldl (fold f) z (Dict.values r))
+            f value (Dict.foldl (always (fold f)) z r)
 
         Anchor_ _ a ->
             f value (fold f a z)
