@@ -374,20 +374,17 @@ dict decoder =
         \v ->
             case v of
                 Ast.Record_ properties ->
-                    properties
-                        |> Dict.toList
-                        |> List.map (\( key, val ) -> ( key, fromValue decoder val ))
-                        |> List.filterMap
-                            (\( key, val ) ->
-                                case val of
-                                    Ok val_ ->
-                                        Just ( key, val_ )
-
-                                    _ ->
-                                        Nothing
-                            )
-                        |> Dict.fromList
-                        |> Ok
+                    Dict.foldl
+                        (\key val res ->
+                            Result.andThen
+                                (\acc ->
+                                    fromValue decoder val
+                                        |> Result.map (\parsed -> Dict.insert key parsed acc)
+                                )
+                                res
+                        )
+                        (Ok Dict.empty)
+                        properties
 
                 _ ->
                     decodeError "record" v
