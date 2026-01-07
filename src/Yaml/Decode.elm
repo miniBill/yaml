@@ -348,7 +348,7 @@ list decoder =
         \v ->
             case v of
                 Ast.List_ list_ ->
-                    singleResult (List.map (fromValue decoder) list_)
+                    combineMap (fromValue decoder) list_
 
                 Ast.Null_ ->
                     Ok []
@@ -1020,24 +1020,24 @@ fromMaybe err mby =
 -- INTERNAL
 
 
-singleResult : List (Result Error a) -> Result Error (List a)
-singleResult =
+combineMap : (a -> Result err b) -> List a -> Result err (List b)
+combineMap f input =
     let
-        each : Result error value -> Result error (List value) -> Result error (List value)
-        each v r =
-            case r of
-                Err _ ->
-                    r
-
-                Ok vs ->
-                    case v of
-                        Ok vok ->
-                            Ok (vok :: vs)
-
+        go : List a -> List b -> Result err (List b)
+        go queue acc =
+            case queue of
+                head :: tail ->
+                    case f head of
                         Err err ->
                             Err err
+
+                        Ok v ->
+                            go tail (v :: acc)
+
+                [] ->
+                    Ok (List.reverse acc)
     in
-    List.foldl each (Ok []) >> Result.map List.reverse
+    go input []
 
 
 find : List String -> Decoder a -> Ast.Value -> Result Error a
