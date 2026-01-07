@@ -86,8 +86,11 @@ problemToString p =
 
 {-| -}
 fromString : String -> Result String Ast.Value
-fromString =
-    P.run parser >> Result.mapError deadEndsToString >> Result.map deref
+fromString input =
+    input
+        |> P.run parser
+        |> Result.mapError deadEndsToString
+        |> Result.map deref
 
 
 {-| -}
